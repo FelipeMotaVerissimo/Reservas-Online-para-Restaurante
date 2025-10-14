@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import {eseState} from 'react'
+import Auth from './pages/Auth.jsx'
 
-
-function App() {
+export default function App() {
+  return (
+    return <Auth/>
+  );  
 }
-
-export default App
