@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import Auth from './pages/Auth'
+import React from 'react';
+import AppRoutes from './routes/Route';
 
 function App() {
-  return <Auth />
+  return <AppRoutes />;
 }
 
-export default App
+export default App;
