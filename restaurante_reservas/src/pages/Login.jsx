@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TelaPrincipal from './TelaPrincipal';
-
+import axios from 'axios';
 
 export default function Login({ onNavigateToCadastro }) {
   const [loginData, setLoginData] = useState({ email: '', senha: '' });
@@ -12,14 +11,27 @@ export default function Login({ onNavigateToCadastro }) {
     setLoginData(prev => ({ ...prev, [name]: value }));
   };
 
-  const onNavigateToTelaPrincipal = () => {
+  const onNavigateToTelaPrincipal = async () => {
     if (!loginData.email || !loginData.senha) {
       alert('Por favor, preencha todos os campos!');
       return;
     }
-    console.log('Login:', loginData);
-    alert('Login realizado com sucesso!');
-    navigate('/telaPrincipal');
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/login', loginData);
+
+      if (response.data.success) {
+
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('nome', response.data.nome);
+        navigate('/telaPrincipal');
+      } else {
+        alert('Email ou senha incorretos!');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao conectar com o servidor!');
+    }
   };
 
   return (
