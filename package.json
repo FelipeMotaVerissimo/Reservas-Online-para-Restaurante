@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "install": "^0.13.0",
+    "lucide-react": "^0.545.0",
+    "npm": "^11.6.2",
+    "react-router-dom": "^7.9.4"
+  }
+}

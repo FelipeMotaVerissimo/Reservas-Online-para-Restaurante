@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TelaPrincipal from './TelaPrincipal';
+
 
 export default function Login({ onNavigateToCadastro }) {
   const [loginData, setLoginData] = useState({ email: '', senha: '' });
+  const navigate = useNavigate();
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
     setLoginData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleLoginSubmit = () => {
+  const onNavigateToTelaPrincipal = () => {
     if (!loginData.email || !loginData.senha) {
       alert('Por favor, preencha todos os campos!');
       return;
     }
     console.log('Login:', loginData);
     alert('Login realizado com sucesso!');
-    // Aqui você faria a chamada à API
+    navigate('/telaPrincipal');
   };
 
   return (
@@ -50,7 +54,7 @@ export default function Login({ onNavigateToCadastro }) {
             />
           </div>
 
-          <button onClick={handleLoginSubmit} className="btn-primary">
+          <button onClick={onNavigateToTelaPrincipal} className="btn-primary">
             ENTRAR
           </button>
         </div>
