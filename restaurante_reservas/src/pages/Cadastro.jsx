@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 export default function Cadastro({ onNavigateToLogin }) {
   const [cadastroData, setCadastroData] = useState({
@@ -13,7 +14,7 @@ export default function Cadastro({ onNavigateToLogin }) {
     setCadastroData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCadastroSubmit = () => {
+  const handleCadastroSubmit = async () => {
     if (!cadastroData.nomeCompleto || !cadastroData.email || !cadastroData.criarSenha || !cadastroData.confirmarSenha) {
       alert('Por favor, preencha todos os campos!');
       return;
@@ -22,10 +23,20 @@ export default function Cadastro({ onNavigateToLogin }) {
       alert('As senhas não coincidem!');
       return;
     }
-    console.log('Cadastro:', cadastroData);
-    alert('Cadastro realizado com sucesso!');
-    // Aqui você faria a chamada à API
-    onNavigateToLogin();
+
+    try {
+      await axios.post('http://localhost:4000/api/usuarios', {
+        nome: cadastroData.nomeCompleto,
+        email: cadastroData.email,
+        senha: cadastroData.criarSenha
+      });
+
+      alert('Cadastro realizado com sucesso!');
+      onNavigateToLogin();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao cadastrar usuário!');
+    }
   };
 
   return (

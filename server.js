@@ -59,6 +59,31 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.post("/api/usuarios", async (req, res) => {
+  const { nome, email, senha } = req.body;
+
+  if (!nome || !email || !senha) {
+    return res.status(400).json({ success: false, message: "Todos os campos são obrigatórios" });
+  }
+
+  try {
+
+    const usuarioExistente = await prisma.usuario.findUnique({ where: { email } });
+    if (usuarioExistente) {
+      return res.status(400).json({ success: false, message: "Email já cadastrado" });
+    }
+
+    const usuario = await prisma.usuario.create({
+      data: { nome, email, senha },
+    });
+
+    res.json({ success: true, nome: usuario.nome });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Erro ao cadastrar usuário" });
+  }
+});
+
 const PORT = 4000;
 app.listen(PORT, () =>
   console.log(`Servidor rodando em http://localhost:${PORT}`)
