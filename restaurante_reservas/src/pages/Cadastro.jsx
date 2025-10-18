@@ -44,7 +44,7 @@ export default function Cadastro({ onNavigateToLogin }) {
       <div className="auth-card">
         <div className="logo">
           <div className="logo-icon">🍽️</div>
-          <h1>SABOR & ARTE</h1>
+          <h1>RESTABLE</h1>
           <p className="logo-subtitle">RESTAURANTE</p>
         </div>
 
