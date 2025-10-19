@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TopBar from "../components/layout/TopBar.jsx";
 import axios from 'axios';
 
 export default function Reservas(){
@@ -24,7 +25,7 @@ export default function Reservas(){
     const onNavigateToTelaPrincipal = () => {
         navigate('/TelaPrincipal');
     };
-
+    
     const handleReservaSubmit = async () => {
         if(!reservaData.diaMarcado || !reservaData.horarioEscolhido || !reservaData.numeroPessoas || !reservaData.telefone || !reservaData.email){
             alert('Por favor, preencha todos os campos.');
@@ -50,6 +51,9 @@ export default function Reservas(){
 
     return(
         <div className="auth-container">
+            <div className='top-Bar'>
+                <TopBar/>
+            </div>
             <div className="auth-card">
                 <div className="logo">
                     <div className="logo-icon">🍽️</div>
@@ -118,9 +122,6 @@ export default function Reservas(){
                 </div>
 
                 <div className="auth-footer">
-                    <button className="link-btn" onClick={onNavigateToTelaPrincipal}>
-                      VER MINHAS RESERVAS
-                    </button>
                     <button className="link-btn" onClick={onNavigateToTelaPrincipal}>
                       CANCELAR
                     </button>

@@ -29,13 +29,14 @@ export default function TelaPrincipal() {
     },[]);
 
     const onNavigateToPendentes = () => {
-        navigate('/TelaPrincipal');
+        navigate('/pendentes');
     }
     const onNavigateToLogin = () => {
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('nome');
         navigate('/Login');
     }
+
     const onNavigateToReservas = () => {
         navigate('/Reservas');
     }
@@ -50,20 +51,20 @@ export default function TelaPrincipal() {
 
                 <div className='logo'>
                     <img 
-                        src="restable-imagem-sem-fundo.png" 
-                        className="logo-icon" alt="Restable 
-                        Image-Logo" 
+                        src="/restable-image-sem-fundo.png" 
+                        alt="Logo Restable" 
+                        className="logo-central" 
                     />
-                    <h1 className='logo-title'>RESTABLE</h1>
                     <p className='logo-subtitle'>RESTAURANTE</p>
-                    <h3 className='mensagem-welcome'>BEM-VINDO(A) DE VOLTA, {nome}!</h3>
+                    <h3 className='mensagem-welcome'>BEM-VINDO(A) DE VOLTA</h3>
+                    <h3 className='mensagem-welcome-name'>{nome}!</h3>
                 </div>
 
                 <div className='actions'>
                     <h4 className='acao-tile'>AÇÕES RÁPIDAS</h4>
                     <button className='btn-primary'
                     onClick={onNavigateToReservas}>Realizar Nova Reserva</button>
-                    <button onClick={onNavigateToPendentes} className='btn-secondary'>Reservas Pendentes</button>
+                    <button className='btn-secondary' onClick={onNavigateToPendentes}>Reservas Pendentes</button>
                 </div>
 
                 <div>

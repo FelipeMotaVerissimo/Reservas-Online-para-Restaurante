@@ -1,9 +1,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Login";
-import TelaPrincipal from "../pages/TelaPrincipal";
-import Reservas from "../pages/Reservas";
+import Login from "../../../src/pages/Login";
+import Cadastro from "../../../src/pages/Cadastro";
+import TelaPrincipal from "../../../src/pages/TelaPrincipal";
+import Reservas from "../../../src/pages/Reservas";
+import Pendentes from "../../../src/pages/Pendentes";
+
 import PrivateRoute from "./PrivateRoute";
 
 export default function AppRoutes() {
@@ -11,6 +14,15 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+
+        <Route
+          path="/cadastro"
+          element={
+            <PrivateRoute>
+              <Cadastro />
+            </PrivateRoute>
+          }
+        />
 
         <Route
           path="/telaPrincipal"
@@ -29,6 +41,16 @@ export default function AppRoutes() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/pendentes"
+          element={
+            <PrivateRoute>
+              <Pendentes />
+            </PrivateRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

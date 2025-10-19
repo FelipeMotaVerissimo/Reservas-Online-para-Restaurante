@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Cadastro({ onNavigateToLogin }) {
+export default function Cadastro() {
+  const navigate = useNavigate();
   const [cadastroData, setCadastroData] = useState({
     nomeCompleto: '',
     email: '',
@@ -13,6 +15,10 @@ export default function Cadastro({ onNavigateToLogin }) {
     const { name, value } = e.target;
     setCadastroData(prev => ({ ...prev, [name]: value }));
   };
+
+  const onNavigateToLogin = async () => {
+    navigate('/');
+  }
 
   const handleCadastroSubmit = async () => {
     if (!cadastroData.nomeCompleto || !cadastroData.email || !cadastroData.criarSenha || !cadastroData.confirmarSenha) {

@@ -77,6 +77,20 @@ html, body, #root {
   margin-bottom: 12px;
 }
 
+.logo-central {
+  width: 260px;             
+  height: auto;
+  display: block;
+  margin: 0 auto 16px auto;
+  object-fit: contain;
+  filter: brightness(1.5); 
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo-central:hover {
+  transform: scale(1.05);
+  filter: brightness(2);
+}
 .logo h1 {
   font-size: 28px;
   color: var(--cor-cinza-escuro);
@@ -246,35 +260,123 @@ html, body, #root {
 }
 
 /* Top Bar */
-.top-Bar {
+.topBar {
+  width: 100%;
+  height: 64px;
+  background: rgba(36, 36, 36, 0.95);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100;
 }
 
-/* Logo Styles */
-.logo-icon {
-  max-width: 120px;
+/* Logo + Nome */
+.logoProduct {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoProduct .logo {
+  width: 170px;              
   height: auto;
+  object-fit: contain;
+  filter: brightness(3);    
+  margin-right: 8px;
+  transform: translateY(1px);
 }
 
-.logo-title {
-  font-size: 28px;
-  color: var(--cor-cinza-escuro);
-  letter-spacing: 2px;
-  margin: 10px 0 4px 0;
+.restaurant-name {
+  color: var(--cor-laranja);
   font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
-/* Mensagem de Boas Vindas */
-.mensagem-welcome {
-  color: var(--cor-cinza-medio);
-  font-size: 18px;
-  margin-top: 16px;
+/* Botões e Perfil */
+.topBar div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--cor-branco);
+}
+
+.topBar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--cor-branco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.topBar button:hover {
+  color: var(--cor-laranja);
+  transform: translateY(-1px);
+}
+
+.topBar span {
+  font-size: 14px;
   font-weight: 600;
-  text-align: center;
+  color: var(--cor-branco);
+}
+.divider {
+    width: 1px;                
+    height: 24px;              
+    background-color: #c85a38;    
+}
+.auth-container {
+  padding-top: 100px; 
+}
+
+/* Card Central */
+.auth-card {
+  background: #1e1e1e;
+  color: var(--cor-branco);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.logo h1, .logo-subtitle, .mensagem-welcome, .mensagem-welcome-name{
+  color: var(--cor-branco);
+  height: 30px;
+}
+
+/* Botões */
+.btn-primary {
+  background: linear-gradient(135deg, var(--cor-laranja), var(--cor-laranja-escuro));
+  color: var(--cor-branco);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--cor-laranja);
+  color: var(--cor-laranja);
+}
+
+.btn-secondary:hover {
+  background: var(--cor-laranja);
+  color: var(--cor-branco);
+}
+
+/* Estatísticas */
+.itens-status {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cor-branco);
+  border-left: 4px solid var(--cor-laranja);
+}
+
+.itens-status strong {
+  color: var(--cor-branco);
 }
 
 /* Actions Section */
@@ -352,7 +454,164 @@ html, body, #root {
   font-size: 18px;
   font-weight: 700;
 }
+/* PENDENTES */
+.reservas-container {
+  min-height: 100vh;
+  background-color: var(--cor-preto);
+  color: #fff;
+  padding-top: 80px;
+}
 
+.reservas-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* ===== Título principal ===== */
+.titulo-pagina {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+/* ===== Contador de status ===== */
+.resumo-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.status-item {
+  text-align: center;
+}
+
+.status-item .numero {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--cor-laranja);
+}
+
+.status-item .rotulo {
+  color: #ccc;
+  font-size: 16px;
+  margin-top: 6px;
+  display: block;
+}
+
+.divider {
+  width: 2px;
+  height: 40px;
+  background-color: var(--cor-laranja);
+}
+
+/* ===== Subtítulo ===== */
+.subtitulo {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* ===== Cards ===== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 24px;
+}
+
+.reserva-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.reserva-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(217, 109, 72, 0.25);
+}
+
+.reserva-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.reserva-card p {
+  color: var(--cor-cinza);
+  margin: 4px 0;
+}
+
+/* ===== Status confirmada ===== */
+.confirm-status {
+  background-color: #00c853;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 12px;
+}
+
+/* ===== Botões ===== */
+.btn-confirmar {
+  background-color: var(--cor-laranja);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-confirmar:hover {
+  background-color: var(--cor-laranja-escuro);
+}
+
+.btn-cancelar {
+  background-color: transparent;
+  color: #ff5252;
+  border: 1px solid #ff5252;
+  border-radius: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-cancelar:hover {
+  background-color: #ff5252;
+  color: #fff;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 600px) {
+  .resumo-status {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .titulo-pagina {
+    font-size: 28px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
 /* Botão Relatório */
 .btn-relatorio {
   width: 100%;
@@ -406,5 +665,21 @@ html, body, #root {
     flex-direction: column;
     text-align: center;
     gap: 8px;
+  }
+    .topBar {
+    flex-direction: column;
+    height: auto;
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .topBar div:last-child {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .auth-card {
+    margin-top: 80px;
+    padding: 32px 20px;
   }
 }

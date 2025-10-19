@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Login({ onNavigateToCadastro }) {
+export default function Login() {
   const [loginData, setLoginData] = useState({ email: '', senha: '' });
   const navigate = useNavigate();
 
@@ -10,8 +10,11 @@ export default function Login({ onNavigateToCadastro }) {
     const { name, value } = e.target;
     setLoginData(prev => ({ ...prev, [name]: value }));
   };
-
+  const onNavigateToCadastro = async () => {
+    navigate('/cadastro');
+  }
   const onNavigateToTelaPrincipal = async () => {
+  
     if (!loginData.email || !loginData.senha) {
       alert('Por favor, preencha todos os campos!');
       return;
