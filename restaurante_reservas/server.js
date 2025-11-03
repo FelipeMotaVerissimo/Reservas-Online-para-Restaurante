@@ -5,16 +5,19 @@ import { PrismaClient } from "@prisma/client";
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || origin.includes('localhost')) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed'));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || origin.includes("localhost")) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Rota de teste
@@ -25,8 +28,7 @@ app.get("/", (req, res) => {
 // Criar reserva
 app.post("/api/reservas", async (req, res) => {
   const { nome, email, telefone, data, pessoas } = req.body;
-  
-  // Validações
+
   if (!nome || !email || !telefone || !data || !pessoas) {
     return res.status(400).json({ error: "Todos os campos são obrigatórios" });
   }
@@ -43,7 +45,7 @@ app.post("/api/reservas", async (req, res) => {
   if (dataReserva < new Date()) {
     return res.status(400).json({ error: "A data não pode ser no passado" });
   }
-  
+
   try {
     const reserva = await prisma.reserva.create({
       data: {
@@ -52,11 +54,14 @@ app.post("/api/reservas", async (req, res) => {
         telefone,
         data: dataReserva,
         pessoas: Number(pessoas),
+        status: "pendente", // NOVO CAMPO ADICIONADO
       },
     });
-    res.status(201).json({ success: true, message: "Reserva criada com sucesso", reserva });
+    res
+      .status(201)
+      .json({ success: true, message: "Reserva criada com sucesso", reserva });
   } catch (err) {
-    console.error(err);
+    console.error("Erro ao criar reserva:", err);
     res.status(500).json({ error: "Erro ao criar reserva" });
   }
 });
@@ -64,28 +69,8 @@ app.post("/api/reservas", async (req, res) => {
 // Listar todas as reservas
 app.get("/api/reservas", async (req, res) => {
   try {
-    const reservas = await prisma.reserva.findMany({ 
-      orderBy: { criadoEm: "desc" } 
-    });
-    res.json(reservas);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erro ao listar reservas" });
-  }
-});
-
-// Listar reservas de um usuário específico (por email)
-app.get("/api/reservas/:email", async (req, res) => {
-  const { email } = req.params;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email é obrigatório" });
-  }
-
-  try {
     const reservas = await prisma.reserva.findMany({
-      where: { email },
-      orderBy: { data: "desc" }
+      orderBy: { criadoEm: "desc" },
     });
     res.json(reservas);
   } catch (err) {
@@ -94,45 +79,56 @@ app.get("/api/reservas/:email", async (req, res) => {
   }
 });
 
-// Deletar reserva
-app.delete("/api/reservas/:id", async (req, res) => {
-  const { id } = req.params;
-
-  if (!id || isNaN(Number(id))) {
-    return res.status(400).json({ error: "ID inválido" });
+// Atualizar status da reserva (PUT)
+app.put("/api/reservas/:id/:acao", async (req, res) => {
+  const { id, acao } = req.params;
+  if (!["confirmar", "cancelar"].includes(acao)) {
+    return res.status(400).json({ error: "Ação inválida" });
   }
 
   try {
-    const reserva = await prisma.reserva.delete({
-      where: { id: Number(id) }
+    const reservaAtualizada = await prisma.reserva.update({
+      where: { id: Number(id) },
+      data: { status: acao === "confirmar" ? "confirmada" : "cancelada" },
     });
-    res.json({ success: true, message: "Reserva cancelada com sucesso", reserva });
+    res.json({ success: true, reserva: reservaAtualizada });
   } catch (err) {
     console.error(err);
     res.status(404).json({ error: "Reserva não encontrada" });
   }
 });
 
-// Login
+// Deletar reserva
+app.delete("/api/reservas/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const reserva = await prisma.reserva.delete({
+      where: { id: Number(id) },
+    });
+    res.json({ success: true, message: "Reserva deletada com sucesso", reserva });
+  } catch (err) {
+    console.error(err);
+    res.status(404).json({ error: "Reserva não encontrada" });
+  }
+});
+
+// Login de usuário
 app.post("/api/login", async (req, res) => {
   const { email, senha } = req.body;
-
   if (!email || !senha) {
     return res.status(400).json({ success: false, message: "Email e senha são obrigatórios" });
   }
 
   try {
     const usuario = await prisma.usuario.findUnique({ where: { email } });
-
     if (!usuario || usuario.senha !== senha) {
       return res.status(401).json({ success: false, message: "Email ou senha inválidos" });
     }
-
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       nome: usuario.nome,
       email: usuario.email,
-      id: usuario.id
+      id: usuario.id,
     });
   } catch (err) {
     console.error(err);
@@ -143,7 +139,6 @@ app.post("/api/login", async (req, res) => {
 // Cadastro de usuário
 app.post("/api/usuarios", async (req, res) => {
   const { nome, email, senha } = req.body;
-
   if (!nome || !email || !senha) {
     return res.status(400).json({ success: false, message: "Todos os campos são obrigatórios" });
   }
@@ -162,11 +157,11 @@ app.post("/api/usuarios", async (req, res) => {
       data: { nome, email, senha },
     });
 
-    res.status(201).json({ 
-      success: true, 
+    res.status(201).json({
+      success: true,
       message: "Cadastro realizado com sucesso",
       nome: usuario.nome,
-      email: usuario.email
+      email: usuario.email,
     });
   } catch (err) {
     console.error(err);
@@ -175,6 +170,4 @@ app.post("/api/usuarios", async (req, res) => {
 });
 
 const PORT = 4000;
-app.listen(PORT, () =>
-  console.log(`Servidor rodando em http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));

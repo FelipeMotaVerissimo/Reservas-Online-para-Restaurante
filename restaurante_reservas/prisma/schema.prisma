@@ -7,15 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Reserva {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  email     String
-  telefone  String
-  data      DateTime
-  pessoas   Int
-  criadoEm  DateTime @default(now())
+enum StatusReserva {
+  pendente
+  confirmada
+  cancelada
 }
+
+model Reserva {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  email    String
+  telefone String
+  data     DateTime
+  pessoas  Int
+  status   String   @default("pendente")
+  criadoEm DateTime @default(now())
+}
+
+
 
 model Usuario {
   id    Int    @id @default(autoincrement())

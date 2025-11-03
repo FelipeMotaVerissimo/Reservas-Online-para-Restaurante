@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@prisma/client": "^6.18.0",
     "install": "^0.13.0",
     "lucide-react": "^0.545.0",
     "npm": "^11.6.2",

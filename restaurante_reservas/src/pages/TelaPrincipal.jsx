@@ -1,54 +1,57 @@
-import React, { useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
-import TopBar from "../components/layout/TopBar.jsx";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import TopBar from "../components/layout/TopBar.jsx";
 
 export default function TelaPrincipal() {
     const navigate = useNavigate();
-    const [nome ,setNome] = useState('');
+    const [nome, setNome] = useState('');
     const [reservasHoje, setReservasHoje] = useState(0);
-        
+    const [mesasDisponiveis, setMesasDisponiveis] = useState(10);
+    const TOTAL_MESAS = 10;
+
+    const atualizarEstatisticas = async () => {
+        try {
+            const { data: reservas } = await axios.get('http://localhost:4000/api/reservas');
+            const hoje = new Date().toISOString().split('T')[0];
+            const reservasHojeArray = reservas.filter(
+                r => r.data.split('T')[0] === hoje && r.status !== "cancelada"
+            );
+
+            setReservasHoje(reservasHojeArray.length);
+            const disponiveis = TOTAL_MESAS - reservasHojeArray.length;
+            setMesasDisponiveis(disponiveis >= 0 ? disponiveis : 0);
+        } catch (err) {
+            console.error("Erro ao buscar reservas:", err);
+        }
+    };
+
     useEffect(() => {
         const nomeSalvo = localStorage.getItem('nome');
-        if(nomeSalvo){
-            setNome(nomeSalvo);
-        };
+        if (nomeSalvo) setNome(nomeSalvo);
 
-        const fetchReservas = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/reservas');
-                const hoje = new Date().toISOString().split('T')[0];
-                const countHoje = response.data.filter(r => r.data.split('T')[0] === hoje).length;
-                setReservasHoje(countHoje);
-            } catch(err) {
-                console.error(err);
-            }
-        }
+        atualizarEstatisticas();
 
-        fetchReservas();
-    },[]);
+        const handleFocus = () => atualizarEstatisticas();
+        window.addEventListener('focus', handleFocus);
 
-    const onNavigateToPendentes = () => {
-        navigate('/pendentes');
-    }
+        return () => window.removeEventListener('focus', handleFocus);
+    }, []);
+
+    const onNavigateToPendentes = () => navigate('/pendentes');
     const onNavigateToLogin = () => {
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('nome');
         navigate('/Login');
-    }
+    };
+    const onNavigateToReservas = () => navigate('/Reservas');
 
-    const onNavigateToReservas = () => {
-        navigate('/Reservas');
-    }
-
-    return(
-        
+    return (
         <div className='auth-container'>
             <div className='top-Bar'>
-                <TopBar/>
+                <TopBar />
             </div>
             <div className='auth-card'>
-
                 <div className='logo'>
                     <img 
                         src="/restable-image-sem-fundo.png" 
@@ -62,9 +65,12 @@ export default function TelaPrincipal() {
 
                 <div className='actions'>
                     <h4 className='acao-tile'>AÇÕES RÁPIDAS</h4>
-                    <button className='btn-primary'
-                    onClick={onNavigateToReservas}>Realizar Nova Reserva</button>
-                    <button className='btn-secondary' onClick={onNavigateToPendentes}>Reservas Pendentes</button>
+                    <button className='btn-primary' onClick={onNavigateToReservas}>
+                        Realizar Nova Reserva
+                    </button>
+                    <button className='btn-secondary' onClick={onNavigateToPendentes}>
+                        Reservas Pendentes
+                    </button>
                 </div>
 
                 <div>
@@ -75,13 +81,12 @@ export default function TelaPrincipal() {
                     </div>
 
                     <div className='itens-status'>
-                        <strong>Mesas Disponíveis:</strong> <span>10</span>
+                        <strong>Mesas Disponíveis:</strong> <span>{mesasDisponiveis}</span>
                     </div>
 
                     <button className='link-btn' onClick={onNavigateToLogin}>
                         SAIR DA CONTA
                     </button>
-                    
                 </div>
             </div>
         </div>
