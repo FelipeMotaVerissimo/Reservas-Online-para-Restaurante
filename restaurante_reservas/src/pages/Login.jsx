@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -6,15 +6,23 @@ export default function Login() {
   const [loginData, setLoginData] = useState({ email: '', senha: '' });
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (isAuthenticated === 'true') {
+      navigate('/telaPrincipal');
+    }
+  }, [navigate]);
+
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
     setLoginData(prev => ({ ...prev, [name]: value }));
   };
+
   const onNavigateToCadastro = async () => {
     navigate('/cadastro');
-  }
+  };
+
   const onNavigateToTelaPrincipal = async () => {
-  
     if (!loginData.email || !loginData.senha) {
       alert('Por favor, preencha todos os campos!');
       return;
@@ -24,7 +32,6 @@ export default function Login() {
       const response = await axios.post('http://localhost:4000/api/login', loginData);
 
       if (response.data.success) {
-
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('nome', response.data.nome);
         navigate('/telaPrincipal');
@@ -87,7 +94,7 @@ export default function Login() {
         </div>
 
         <div className="auth-footer">
-          <p>Não tem una conta?</p>
+          <p>Não tem uma conta?</p>
           <button className="link-btn" onClick={onNavigateToCadastro}>
             CADASTRE-SE
           </button>

@@ -14,15 +14,8 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-
-        <Route
-          path="/cadastro"
-          element={
-            <PrivateRoute>
-              <Cadastro />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
 
         <Route
           path="/telaPrincipal"
@@ -32,7 +25,6 @@ export default function AppRoutes() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/reservas"
           element={
@@ -41,7 +33,6 @@ export default function AppRoutes() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/pendentes"
           element={
@@ -51,6 +42,7 @@ export default function AppRoutes() {
           }
         />
 
+        <Route path="*" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

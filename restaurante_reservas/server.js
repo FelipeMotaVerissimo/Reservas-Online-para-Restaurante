@@ -38,12 +38,14 @@ app.post("/api/reservas", async (req, res) => {
   }
 
   const dataReserva = new Date(data);
+  const agora = new Date();
+
   if (isNaN(dataReserva.getTime())) {
     return res.status(400).json({ error: "Data inválida" });
   }
 
-  if (dataReserva < new Date()) {
-    return res.status(400).json({ error: "A data não pode ser no passado" });
+  if (dataReserva < agora) {
+    return res.status(400).json({ error: "A data/hora não pode ser no passado" });
   }
 
   try {
@@ -54,7 +56,7 @@ app.post("/api/reservas", async (req, res) => {
         telefone,
         data: dataReserva,
         pessoas: Number(pessoas),
-        status: "pendente", // NOVO CAMPO ADICIONADO
+        status: "pendente",
       },
     });
     res

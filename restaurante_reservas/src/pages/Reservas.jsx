@@ -34,11 +34,11 @@ export default function Reservas(){
 
         try {
             await axios.post('http://localhost:4000/api/reservas', {
-                nome: localStorage.getItem('nome'),
-                email: reservaData.email,
-                telefone: reservaData.telefone,
-                data: reservaData.diaMarcado,
-                pessoas: Number(reservaData.numeroPessoas),
+            nome: localStorage.getItem('nome'),
+            email: reservaData.email,
+            telefone: reservaData.telefone,
+            data: `${reservaData.diaMarcado}T${reservaData.horarioEscolhido}`,
+            pessoas: Number(reservaData.numeroPessoas),
             });
 
             alert('Reserva realizada com sucesso!');

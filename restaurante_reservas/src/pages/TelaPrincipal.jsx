@@ -27,6 +27,12 @@ export default function TelaPrincipal() {
     };
 
     useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        if (isAuthenticated !== 'true') {
+            navigate('/Login');
+            return;
+        }
+
         const nomeSalvo = localStorage.getItem('nome');
         if (nomeSalvo) setNome(nomeSalvo);
 
@@ -36,14 +42,15 @@ export default function TelaPrincipal() {
         window.addEventListener('focus', handleFocus);
 
         return () => window.removeEventListener('focus', handleFocus);
-    }, []);
+    }, [navigate]);
 
     const onNavigateToPendentes = () => navigate('/pendentes');
+    
     const onNavigateToLogin = () => {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('nome');
-        navigate('/Login');
+        localStorage.clear();
+        window.location.href = '/Login';
     };
+
     const onNavigateToReservas = () => navigate('/Reservas');
 
     return (
