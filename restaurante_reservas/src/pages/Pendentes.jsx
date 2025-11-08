@@ -45,7 +45,21 @@ export default function Pendentes({ atualizarEstatisticas }) {
     };
 
     const confirmarReserva = (id) => atualizarReserva(id, 'confirmar');
-    const cancelarReserva = (id) => atualizarReserva(id, 'cancelar');
+    //const cancelarReserva = (id) => atualizarReserva(id, 'cancelar');
+    const excluirReserva = async (id) => {
+        if (!window.confirm("Tem certeza que deseja excluir esta reserva?")) return;
+    
+        try {
+            await axios.delete(`http://localhost:4000/api/reservas/${id}`);
+            setReservas(prev => prev.filter(r => r.id !== id));
+            alert("Reserva excluída com sucesso!");
+            if (typeof atualizarEstatisticas === 'function') atualizarEstatisticas();
+        } catch (err) {
+            console.error("Erro ao excluir reserva:", err);
+            alert("Erro ao excluir reserva.");
+        }
+    };
+    
 
     return (
         <div className="reservas-container">
@@ -81,37 +95,48 @@ export default function Pendentes({ atualizarEstatisticas }) {
 
                     {reservas.map(reserva => (
                         <div className={`reserva-card ${reserva.status}`} key={reserva.id}>
-                            <h3>
-                                {new Date(reserva.data).toLocaleDateString("pt-BR", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                })}
-                            </h3>
-                            <p>{reserva.pessoas} pessoas</p>
+    <h3>
+        {new Date(reserva.data).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        })}
+    </h3>
 
-                            {reserva.status === "confirmada" ? (
-                                <div className="confirm-status">Confirmada</div>
-                            ) : (
-                                <button
-                                    className="btn-confirmar"
-                                    onClick={() => confirmarReserva(reserva.id)}
-                                    disabled={loadingIds.includes(reserva.id)}
-                                >
-                                    {loadingIds.includes(reserva.id) ? "Atualizando..." : "CONFIRMAR"}
-                                </button>
-                            )}
+    <p>
+        Horário: {new Date(reserva.data).toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+        })}
+    </p>
 
-                            {reserva.status !== "cancelada" && (
-                                <button
-                                    className="btn-cancelar"
-                                    onClick={() => cancelarReserva(reserva.id)}
-                                    disabled={loadingIds.includes(reserva.id)}
-                                >
-                                    {loadingIds.includes(reserva.id) ? "Atualizando..." : "CANCELAR"}
-                                </button>
-                            )}
-                        </div>
+    <p>{reserva.pessoas} pessoas</p>
+
+    {reserva.status === "confirmada" ? (
+        <div className="confirm-status">Confirmada</div>
+    ) : (
+        <button
+            className="btn-confirmar"
+            onClick={() => confirmarReserva(reserva.id)}
+            disabled={loadingIds.includes(reserva.id)}
+        >
+            {loadingIds.includes(reserva.id) ? "Atualizando..." : "CONFIRMAR"}
+        </button>
+    )}
+
+    {reserva.status !== "cancelada" && (
+        <button
+            className="btn-cancelar"
+            onClick={() => excluirReserva(reserva.id)}
+            disabled={loadingIds.includes(reserva.id)}
+        >
+            {loadingIds.includes(reserva.id) ? "Atualizando..." : "CANCELAR"}
+        </button>
+    )}
+
+
+</div>
+
                     ))}
                 </div>
 

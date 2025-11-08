@@ -48,11 +48,14 @@ export default function Cadastro() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="logo">
-          <div className="logo-icon">🍽️</div>
-          <h1>RESTABLE</h1>
-          <p className="logo-subtitle">RESTAURANTE</p>
-        </div>
+      <div className="logo">
+        <img 
+          src="/restable-image-sem-fundo.png" 
+          alt="Logo Restable" 
+          className="logo-central" 
+        />
+      </div>
+
 
         <h2 className="auth-title">CRIAR SUA CONTA</h2>
 
